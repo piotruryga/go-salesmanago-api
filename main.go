@@ -11,26 +11,30 @@ import (
 	"time"
 )
 
+const (
+	APP1_ENDPOINT       = "https://www.salesmanago.pl/api"
+	HEADER_ACCEPT       = "application/json, application/json"
+	HEADER_CONTENT_TYPE = "application/json;charset=UTF-8"
+)
+
 func main() {
 
-	var has hasContactRequest
-	has.AddAuth("123abc", "h4jsu6pc5txybj04", strconv.FormatInt(time.Now().Unix(), 10), "4f69782e826841f794080cae87648e42")
-	has.InitHasContactRequest("admin@vendor.pl", "piotrek.uryga+7574@onet.pl")
+	var hasContactRequest hasContactRequest
+	hasContactRequest.AddAuth("123abc", "h4jsu6pc5txybj04", strconv.FormatInt(time.Now().Unix(), 10), "4f69782e826841f794080cae87648e42")
+	hasContactRequest.InitHasContactRequest("admin@vendor.pl", "piotrek.uryga+7574@onet.pl")
 
-	b := new(bytes.Buffer)
+	body := new(bytes.Buffer)
 
-	error := json.NewEncoder(b).Encode(has)
+	error := json.NewEncoder(body).Encode(hasContactRequest)
 	if error != nil {
 		log.Fatal(error)
 	}
 
-	req, error := http.NewRequest("POST", "https://www.salesmanago.pl/api/contact/hasContact", b)
-	req.Header.Set("Accept", "application/json, application/json")
-	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
+	req, error := http.NewRequest("POST", APP1_ENDPOINT+"/contact/hasContact", body)
+	req.Header.Set("Accept", HEADER_ACCEPT)
+	req.Header.Set("Content-Type", HEADER_CONTENT_TYPE)
 	client := http.Client{Timeout: 30 * time.Second}
 	response, error := client.Do(req)
-
-	//response, error := http.Post("https://www.salesmanago.pl/api/contact/hasContact", "application/json", b )
 	if error != nil {
 		log.Fatalf("Cannot post")
 	}
