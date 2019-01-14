@@ -6,7 +6,7 @@ type SalesmanagoResponse struct {
 	Result  bool
 }
 
-type hasContactResponse struct {
+type HasContactResponse struct {
 	SalesmanagoResponse
 	ContactId string
 }
