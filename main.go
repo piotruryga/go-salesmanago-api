@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -26,10 +26,17 @@ func main() {
 
 	client := http.Client{Timeout: 30 * time.Second}
 
-	var hasContactRequest HasContactRequest
-	tt := hasContactRequest.CallMethod(authRequest, client)
-	log.Println(tt)
+	//var hasContactRequest HasContactRequest
+	//tt := hasContactRequest.CallMethod(authRequest, client)
+	//log.Println(tt)
 
-	//var contactDelete
+	InitRF()
+
+	if request, ok := ReturnImplementation("hasContactRequest").(*HasContactRequest); ok {
+		//fmt.Println(ok)
+		request.CallMethod(authRequest, client)
+	} else {
+		fmt.Println("XXX")
+	}
 
 }

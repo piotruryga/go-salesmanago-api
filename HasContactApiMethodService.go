@@ -10,11 +10,6 @@ import (
 	"time"
 )
 
-type HasContactRequest struct {
-	AuthRequest
-	Email string `json:"email"`
-}
-
 func (h *HasContactRequest) InitHasContactRequest(email string) {
 	h.Email = email
 }

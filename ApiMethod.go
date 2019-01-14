@@ -1,12 +1,7 @@
 package main
 
-import (
-	"bytes"
-	"net/http"
-)
-
 type ApiMethod interface {
-	CallMethod(authRequest AuthRequest, client http.Client) TimeTrack
+	//CallMethod(authRequest AuthRequest, client http.Client) TimeTrack
 
-	PrepareHasContactRequest(body *bytes.Buffer) (*http.Request, error)
+	//PrepareHasContactRequest(body *bytes.Buffer) (*http.Request, error)
 }
