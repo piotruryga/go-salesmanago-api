@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-type Authrequest struct {
+type AuthRequest struct {
 	ApiKey      string `json:"apiKey"`
 	ClientId    string `json:"clientId"`
 	Sha         string `json:"sha"`
@@ -14,7 +14,7 @@ type Authrequest struct {
 	ApiSecret   string
 }
 
-func (a *Authrequest) AddAuth(apiKey string, clientId string, requestTime string, apiSecret string) {
+func (a *AuthRequest) AddAuth(apiKey string, clientId string, requestTime string, apiSecret string) {
 	a.ApiKey = apiKey
 	a.ClientId = clientId
 	a.RequestTime = requestTime
@@ -22,7 +22,7 @@ func (a *Authrequest) AddAuth(apiKey string, clientId string, requestTime string
 	//a.Sha = createSha(apiKey, clientId, apiSecret)
 }
 
-func (a *Authrequest) createSha() {
+func (a *AuthRequest) createSha() {
 	hash := sha1.New()
 	hash.Write([]byte(a.ApiKey + a.ClientId + a.ApiSecret))
 	sha1_hash := hex.EncodeToString(hash.Sum(nil))

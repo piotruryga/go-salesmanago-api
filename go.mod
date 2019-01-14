@@ -1,1 +1,1 @@
-module salesmanago-api
+module github.com/piotruryga/go-salesmanago-api

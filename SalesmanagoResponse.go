@@ -10,3 +10,7 @@ type HasContactResponse struct {
 	SalesmanagoResponse
 	ContactId string
 }
+
+type ContactDeleteResponse struct {
+	SalesmanagoResponse
+}

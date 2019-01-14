@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-	testmodML "github.com/piotruryga/salesmanago-api/x"
 )
 
 const (
@@ -16,7 +15,7 @@ const (
 
 func main() {
 
-	var authRequest = Authrequest{
+	var authRequest = AuthRequest{
 		ApiKey:      "123abc",
 		ClientId:    "h4jsu6pc5txybj04",
 		RequestTime: strconv.FormatInt(time.Now().Unix(), 10),
@@ -27,7 +26,10 @@ func main() {
 
 	client := http.Client{Timeout: 30 * time.Second}
 
-	tt := callHasContact(authRequest, client)
+	var hasContactRequest HasContactRequest
+	tt := hasContactRequest.CallMethod(authRequest, client)
 	log.Println(tt)
+
+	//var contactDelete
 
 }

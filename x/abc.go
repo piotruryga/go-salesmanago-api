@@ -1,5 +1,5 @@
 package x
 
-func xxx() {
+func Xxx() {
 
 }
