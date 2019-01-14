@@ -10,6 +10,7 @@ type Authrequest struct {
 	ClientId    string `json:"clientId"`
 	Sha         string `json:"sha"`
 	RequestTime string `json:"requestTime"`
+	Owner       string `json:"owner"`
 	ApiSecret   string
 }
 
