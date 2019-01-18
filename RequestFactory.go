@@ -1,14 +1,13 @@
 package main
 
-import "net/http"
+import (
+	"bytes"
+	"net/http"
+)
 
 type RequestFactory interface {
 	CallMethod(authRequest AuthRequest, client http.Client) TimeTrack
-}
-
-type ContactDeleteRequest struct {
-	AuthRequest
-	Email string `json:"email"`
+	PrepareBody(authrequest AuthRequest, email string) (*bytes.Buffer, error)
 }
 
 var database map[string]interface{}

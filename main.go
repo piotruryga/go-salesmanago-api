@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -26,11 +27,34 @@ func main() {
 	client := http.Client{Timeout: 30 * time.Second}
 	InitRequestFactory()
 
+	hasContactTt, error := callHasContact(authRequest, client)
+	if error != nil {
+		log.Fatalf("Cannot call hasContact")
+	}
+	log.Println(hasContactTt)
+
+	deleteContactTt, error := callDeleteContact(authRequest, client)
+	if error != nil {
+		log.Fatalf("Cannot call deleteContact")
+	}
+	log.Println(deleteContactTt)
+
+}
+
+func callDeleteContact(authRequest AuthRequest, client http.Client) (TimeTrack, error) {
+	if request, ok := ReturnImplementation("contactDeleteRequest").(*ContactDeleteRequest); ok {
+		request.InitContactDeleteRequest("piotrek.uryga@gmail.com")
+		return request.CallMethod(authRequest, client), nil
+	} else {
+		return TimeTrack{}, errors.New("cannot call hasContactRequest")
+	}
+}
+
+func callHasContact(authRequest AuthRequest, client http.Client) (TimeTrack, error) {
 	if request, ok := ReturnImplementation("hasContactRequest").(*HasContactRequest); ok {
 		request.InitHasContactRequest("piotrek.uryga@gmail.com")
-		request.CallMethod(authRequest, client) //todo add TimeTrack
+		return request.CallMethod(authRequest, client), nil
 	} else {
-		log.Fatalf("Cannot get method implementation for")
+		return TimeTrack{}, errors.New("cannot call hasContactRequest")
 	}
-
 }

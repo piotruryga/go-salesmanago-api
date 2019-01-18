@@ -21,7 +21,7 @@ func (h *HasContactRequest) InitHasContactRequest(email string) {
 
 func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client http.Client) TimeTrack {
 
-	body, error := prepareHasContactBody(request, authRequest, request.Email)
+	body, error := request.PrepareBody(authRequest, request.Email)
 	req, error := request.PrepareHasContactRequest(body)
 	t := time.Now()
 	var timing int64 = 0
@@ -57,7 +57,7 @@ func (request *HasContactRequest) PrepareHasContactRequest(body *bytes.Buffer) (
 	return req, error
 }
 
-func prepareHasContactBody(hasContactRequest *HasContactRequest, authrequest AuthRequest, email string) (*bytes.Buffer, error) {
+func (hasContactRequest *HasContactRequest) PrepareBody(authrequest AuthRequest, email string) (*bytes.Buffer, error) {
 	hasContactRequest.AuthRequest = authrequest
 	hasContactRequest.InitHasContactRequest(email)
 	body := new(bytes.Buffer)
