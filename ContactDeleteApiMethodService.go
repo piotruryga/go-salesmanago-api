@@ -20,7 +20,12 @@ func (request *ContactDeleteRequest) CallMethod(authRequest AuthRequest, client 
 	return TimeTrack{}
 }
 
-func (request *ContactDeleteRequest) PrepareBody(contactDeleteRequest *ContactDeleteRequest, authrequest AuthRequest, email string) (*bytes.Buffer, error) {
+func (request *ContactDeleteRequest) PrepareBody(authrequest AuthRequest, email string) (*bytes.Buffer, error) {
 	//todo implement
 	return nil, errors.New("todo")
+}
+
+func (request *ContactDeleteRequest) PrepareRequest(body *bytes.Buffer) (*http.Request, error) {
+	//todo implement
+	return nil, nil
 }

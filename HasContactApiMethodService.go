@@ -22,7 +22,7 @@ func (h *HasContactRequest) InitHasContactRequest(email string) {
 func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client http.Client) TimeTrack {
 
 	body, error := request.PrepareBody(authRequest, request.Email)
-	req, error := request.PrepareHasContactRequest(body)
+	req, error := request.PrepareRequest(body)
 	t := time.Now()
 	var timing int64 = 0
 	response, error := client.Do(req)
@@ -50,7 +50,7 @@ func ParseResponse(response *http.Response) (*HasContactResponse, error) {
 	return s, error
 }
 
-func (request *HasContactRequest) PrepareHasContactRequest(body *bytes.Buffer) (*http.Request, error) {
+func (request *HasContactRequest) PrepareRequest(body *bytes.Buffer) (*http.Request, error) {
 	req, error := http.NewRequest("POST", APP1_ENDPOINT+"/contact/hasContact", body)
 	req.Header.Set("Accept", HEADER_ACCEPT)
 	req.Header.Set("Content-Type", HEADER_CONTENT_TYPE)

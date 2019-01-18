@@ -8,6 +8,7 @@ import (
 type RequestFactory interface {
 	CallMethod(authRequest AuthRequest, client http.Client) TimeTrack
 	PrepareBody(authrequest AuthRequest, email string) (*bytes.Buffer, error)
+	PrepareRequest(body *bytes.Buffer) (*http.Request, error)
 }
 
 var database map[string]interface{}
