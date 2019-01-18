@@ -10,6 +10,11 @@ import (
 	"time"
 )
 
+type HasContactRequest struct {
+	AuthRequest
+	Email string `json:"email"`
+}
+
 func (h *HasContactRequest) InitHasContactRequest(email string) {
 	h.Email = email
 }
@@ -29,7 +34,7 @@ func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client htt
 		response.Body.Close()
 	}()
 	hasContactResponse, error := ParseResponse(response)
-	log.Println(hasContactResponse.Success, "", hasContactResponse.ContactId)
+	log.Printf("Has contact status: %v, message: %v, contactId: %v", hasContactResponse.Success, hasContactResponse.Message, hasContactResponse.ContactId)
 	return New("hasContact", "1", timing)
 
 }

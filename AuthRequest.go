@@ -19,10 +19,9 @@ func (a *AuthRequest) AddAuth(apiKey string, clientId string, requestTime string
 	a.ClientId = clientId
 	a.RequestTime = requestTime
 	a.ApiSecret = apiSecret
-	//a.Sha = createSha(apiKey, clientId, apiSecret)
 }
 
-func (a *AuthRequest) createSha() {
+func (a *AuthRequest) CreateSha() {
 	hash := sha1.New()
 	hash.Write([]byte(a.ApiKey + a.ClientId + a.ApiSecret))
 	sha1_hash := hex.EncodeToString(hash.Sum(nil))

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -22,21 +22,15 @@ func main() {
 		ApiSecret:   "4f69782e826841f794080cae87648e42",
 		Owner:       "admin@vendor.pl",
 	}
-	authRequest.createSha()
-
+	authRequest.CreateSha()
 	client := http.Client{Timeout: 30 * time.Second}
-
-	//var hasContactRequest HasContactRequest
-	//tt := hasContactRequest.CallMethod(authRequest, client)
-	//log.Println(tt)
-
-	InitRF()
+	InitRequestFactory()
 
 	if request, ok := ReturnImplementation("hasContactRequest").(*HasContactRequest); ok {
-		//fmt.Println(ok)
-		request.CallMethod(authRequest, client)
+		request.InitHasContactRequest("piotrek.uryga@gmail.com")
+		request.CallMethod(authRequest, client) //todo add TimeTrack
 	} else {
-		fmt.Println("XXX")
+		log.Fatalf("Cannot get method implementation for")
 	}
 
 }
