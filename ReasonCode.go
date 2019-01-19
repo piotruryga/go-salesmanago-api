@@ -3,7 +3,7 @@ package main
 type ReasonCode int
 
 const (
-	UNKNOWN ReasonCode = 0 + iota
+	OK ReasonCode = 0 + iota
 	CANNOT_POST
 	TIMEOUT
 	PARSE_ERROR
@@ -11,7 +11,7 @@ const (
 
 func (r ReasonCode) String() string {
 	var types = [...]string{
-		"UNKNOWN",
+		"OK",
 		"CANNOT_POST",
 		"TIMEOUT",
 		"PARSE_ERROR",

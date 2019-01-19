@@ -2,6 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"log"
 	"net/http"
 	"strconv"
@@ -15,6 +18,17 @@ const (
 )
 
 func main() {
+
+	connStr := "host=%s port=%s user=%s dbname=%s sslmode=%s"
+	connStr = fmt.Sprintf(connStr, "localhost", "5432", "postgres", "sm_api_metrix", "disable")
+	db, err := gorm.Open("postgres", connStr)
+	db.DB().SetMaxOpenConns(100)
+	db.DB().SetMaxIdleConns(10)
+
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
 
 	var authRequest = AuthRequest{
 		ApiKey:      "123abc",

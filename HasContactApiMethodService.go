@@ -27,7 +27,7 @@ func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client htt
 	var timing int64 = 0
 	result := true
 	var reasonCode ReasonCode
-	reasonCode = UNKNOWN
+	reasonCode = OK
 	response, error := client.Do(req)
 	if error != nil {
 		log.Fatalf("Cannot post for method hasContact")
@@ -37,7 +37,7 @@ func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client htt
 	defer func() {
 		timing = timeTrack(t, "hasContact")
 		response.Body.Close()
-		result = false
+		result = true
 
 	}()
 	hasContactResponse, error := ParseResponse(response)
@@ -48,7 +48,7 @@ func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client htt
 	}
 	log.Printf("Has contact status: %v, message: %v, contactId: %v, reasonCode: %v", hasContactResponse.Success, hasContactResponse.Message,
 		hasContactResponse.ContactId, reasonCode.String())
-	return New("hasContact", "1", timing, result, "")
+	return New("hasContact", "1", timing, result, reasonCode.String())
 
 }
 

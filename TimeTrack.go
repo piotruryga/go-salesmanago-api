@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type TimeTrack struct {
+	gorm.Model
 	MethodName  string
 	AppInstance string
 	Time        int64
