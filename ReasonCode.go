@@ -11,6 +11,7 @@ const (
 
 func (r ReasonCode) String() string {
 	var types = [...]string{
+		"UNKNOWN",
 		"CANNOT_POST",
 		"TIMEOUT",
 		"PARSE_ERROR",

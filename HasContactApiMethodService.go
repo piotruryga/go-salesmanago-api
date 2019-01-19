@@ -27,27 +27,27 @@ func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client htt
 	var timing int64 = 0
 	result := true
 	var reasonCode ReasonCode
-	reasonCode = 0
+	reasonCode = UNKNOWN
 	response, error := client.Do(req)
 	if error != nil {
 		log.Fatalf("Cannot post for method hasContact")
 		result = false
-		reasonCode = 1
+		reasonCode = TIMEOUT
 	}
 	defer func() {
 		timing = timeTrack(t, "hasContact")
 		response.Body.Close()
 		result = false
-		reasonCode = 2
+
 	}()
 	hasContactResponse, error := ParseResponse(response)
 	if error != nil {
 		log.Fatalf("Cannot parse response for method hasContact")
 		result = false
-		reasonCode = 3
+		reasonCode = PARSE_ERROR
 	}
 	log.Printf("Has contact status: %v, message: %v, contactId: %v, reasonCode: %v", hasContactResponse.Success, hasContactResponse.Message,
-		hasContactResponse.ContactId, reasonCode)
+		hasContactResponse.ContactId, reasonCode.String())
 	return New("hasContact", "1", timing, result, "")
 
 }
