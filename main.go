@@ -43,13 +43,13 @@ func main() {
 
 	hasContactTt, error := callHasContact(authRequest, client)
 	if error != nil {
-		log.Fatalf("Cannot call hasContact")
+		log.Printf("Cannot call hasContact %s", error)
 	}
 	log.Println(hasContactTt)
 
 	deleteContactTt, error := callDeleteContact(authRequest, client)
 	if error != nil {
-		log.Fatalf("Cannot call deleteContact")
+		log.Printf("Cannot call deleteContact %s", error)
 	}
 	log.Println(deleteContactTt)
 

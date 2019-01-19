@@ -30,24 +30,30 @@ func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client htt
 	reasonCode = OK
 	response, error := client.Do(req)
 	if error != nil {
-		log.Fatalf("Cannot post for method hasContact")
+		log.Printf("Cannot post for method hasContact")
 		result = false
 		reasonCode = TIMEOUT
 	}
 	defer func() {
 		timing = timeTrack(t, "hasContact")
-		response.Body.Close()
+		if response != nil {
+			response.Body.Close()
+		}
+
 		result = true
 
 	}()
-	hasContactResponse, error := ParseResponse(response)
-	if error != nil {
-		log.Fatalf("Cannot parse response for method hasContact")
-		result = false
-		reasonCode = PARSE_ERROR
+	if response != nil {
+		hasContactResponse, error := ParseResponse(response)
+		if error != nil {
+			log.Printf("Cannot parse response for method hasContact")
+			result = false
+			reasonCode = PARSE_ERROR
+		}
+		log.Printf("Has contact status: %v, message: %v, contactId: %v, reasonCode: %v", hasContactResponse.Success, hasContactResponse.Message,
+			hasContactResponse.ContactId, reasonCode.String())
 	}
-	log.Printf("Has contact status: %v, message: %v, contactId: %v, reasonCode: %v", hasContactResponse.Success, hasContactResponse.Message,
-		hasContactResponse.ContactId, reasonCode.String())
+
 	return New("hasContact", "1", timing, result, reasonCode.String())
 
 }
@@ -76,7 +82,7 @@ func (hasContactRequest *HasContactRequest) PrepareBody(authrequest AuthRequest,
 	body := new(bytes.Buffer)
 	error := json.NewEncoder(body).Encode(hasContactRequest)
 	if error != nil {
-		log.Fatal(error)
+		log.Print(error)
 	}
 	return body, error
 }
