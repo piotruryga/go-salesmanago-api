@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/carlescere/scheduler"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"log"
@@ -21,14 +22,16 @@ func main() {
 
 	connStr := "host=%s port=%s user=%s dbname=%s sslmode=%s"
 	connStr = fmt.Sprintf(connStr, "localhost", "5432", "postgres", "sm_api_metrix", "disable")
-	db, err := gorm.Open("postgres", connStr)
-	db.DB().SetMaxOpenConns(100)
-	db.DB().SetMaxIdleConns(10)
+	//db, err := gorm.Open("postgres", connStr)
+	var err error
+	dbTT.pgDB, err = gorm.Open("postgres", connStr)
+	dbTT.pgDB.DB().SetMaxOpenConns(100)
+	dbTT.pgDB.DB().SetMaxIdleConns(10)
 
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+	defer dbTT.pgDB.Close()
 
 	var authRequest = AuthRequest{
 		ApiKey:      "123abc",
@@ -41,11 +44,14 @@ func main() {
 	client := http.Client{Timeout: 30 * time.Second}
 	InitRequestFactory()
 
-	hasContactTt, error := callHasContact(authRequest, client)
-	if error != nil {
-		log.Printf("Cannot call hasContact %s", error)
+	methodsScheduler := func() {
+		handleHasContact(authRequest, client)
+
 	}
-	log.Println(hasContactTt)
+
+	scheduler.Every(15).Seconds().Run(methodsScheduler)
+	time.Sleep(10 * time.Minute)
+	//handleHasContact(authRequest, client)
 
 	deleteContactTt, error := callDeleteContact(authRequest, client)
 	if error != nil {
@@ -53,6 +59,16 @@ func main() {
 	}
 	log.Println(deleteContactTt)
 
+}
+
+func handleHasContact(authRequest AuthRequest, client http.Client) {
+	hasContactTt, error := callHasContact(authRequest, client)
+	if error != nil {
+		log.Printf("Cannot call hasContact %s", error)
+	} else {
+		dbTT.pgDB.Create(&hasContactTt)
+	}
+	log.Println(hasContactTt)
 }
 
 func callDeleteContact(authRequest AuthRequest, client http.Client) (TimeTrack, error) {

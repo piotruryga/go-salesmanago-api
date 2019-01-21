@@ -35,15 +35,13 @@ func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client htt
 		reasonCode = TIMEOUT
 	}
 	defer func() {
-		timing = timeTrack(t, "hasContact")
 		if response != nil {
 			response.Body.Close()
+			result = true
 		}
-
-		result = true
-
 	}()
 	if response != nil {
+		timing = timeTrack(t, "hasContact")
 		hasContactResponse, error := ParseResponse(response)
 		if error != nil {
 			log.Printf("Cannot parse response for method hasContact")
