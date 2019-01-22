@@ -20,6 +20,8 @@ func (h *HasContactRequest) InitHasContactRequest(email string) {
 	h.Email = email
 }
 
+var repository = TimeTrackRepositoryImpl{dbTT.pgDB}
+
 func (request *HasContactRequest) CallMethod(authRequest AuthRequest, client http.Client) TimeTrack {
 
 	body, error := request.PrepareBody(authRequest, request.Email)
@@ -91,7 +93,9 @@ func handleHasContact(authRequest AuthRequest, client http.Client) {
 	if error != nil {
 		log.Printf("Cannot call hasContact %s", error)
 	} else {
-		dbTT.pgDB.Create(&hasContactTt)
+		//todo error handling
+		repository.PersistNew(dbTT.pgDB, &hasContactTt)
+
 	}
 	log.Println(hasContactTt)
 }

@@ -44,7 +44,7 @@ func main() {
 
 	methodsScheduler := func() {
 		go handleHasContact(authRequest, client)
-		go handleDeleteContact(authRequest, client)
+		//go handleDeleteContact(authRequest, client)
 
 	}
 
