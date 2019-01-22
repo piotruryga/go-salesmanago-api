@@ -1,12 +1,10 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"github.com/carlescere/scheduler"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -45,46 +43,12 @@ func main() {
 	InitRequestFactory()
 
 	methodsScheduler := func() {
-		handleHasContact(authRequest, client)
+		go handleHasContact(authRequest, client)
+		go handleDeleteContact(authRequest, client)
 
 	}
 
-	scheduler.Every(15).Seconds().Run(methodsScheduler)
+	scheduler.Every(5).Seconds().Run(methodsScheduler)
 	time.Sleep(10 * time.Minute)
-	//handleHasContact(authRequest, client)
 
-	deleteContactTt, error := callDeleteContact(authRequest, client)
-	if error != nil {
-		log.Printf("Cannot call deleteContact %s", error)
-	}
-	log.Println(deleteContactTt)
-
-}
-
-func handleHasContact(authRequest AuthRequest, client http.Client) {
-	hasContactTt, error := callHasContact(authRequest, client)
-	if error != nil {
-		log.Printf("Cannot call hasContact %s", error)
-	} else {
-		dbTT.pgDB.Create(&hasContactTt)
-	}
-	log.Println(hasContactTt)
-}
-
-func callDeleteContact(authRequest AuthRequest, client http.Client) (TimeTrack, error) {
-	if request, ok := ReturnImplementation("contactDeleteRequest").(*ContactDeleteRequest); ok {
-		request.InitContactDeleteRequest("piotrek.uryga@gmail.com")
-		return request.CallMethod(authRequest, client), nil
-	} else {
-		return TimeTrack{}, errors.New("cannot call hasContactRequest")
-	}
-}
-
-func callHasContact(authRequest AuthRequest, client http.Client) (TimeTrack, error) {
-	if request, ok := ReturnImplementation("hasContactRequest").(*HasContactRequest); ok {
-		request.InitHasContactRequest("piotrek.uryga@gmail.com")
-		return request.CallMethod(authRequest, client), nil
-	} else {
-		return TimeTrack{}, errors.New("cannot call hasContactRequest")
-	}
 }

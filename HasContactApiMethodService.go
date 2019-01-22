@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -83,4 +84,23 @@ func (hasContactRequest *HasContactRequest) PrepareBody(authrequest AuthRequest,
 		log.Print(error)
 	}
 	return body, error
+}
+
+func handleHasContact(authRequest AuthRequest, client http.Client) {
+	hasContactTt, error := callHasContact(authRequest, client)
+	if error != nil {
+		log.Printf("Cannot call hasContact %s", error)
+	} else {
+		dbTT.pgDB.Create(&hasContactTt)
+	}
+	log.Println(hasContactTt)
+}
+
+func callHasContact(authRequest AuthRequest, client http.Client) (TimeTrack, error) {
+	if request, ok := ReturnImplementation("hasContactRequest").(*HasContactRequest); ok {
+		request.InitHasContactRequest("piotrek.uryga@gmail.com")
+		return request.CallMethod(authRequest, client), nil
+	} else {
+		return TimeTrack{}, errors.New("cannot call hasContactRequest")
+	}
 }
